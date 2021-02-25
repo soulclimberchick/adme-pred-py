@@ -14,10 +14,8 @@
 ### Tech Stack
 This Project is created with:
 * RDKit
-* Amazon CLI
-* Boto3
 * Matplotlib
-* Mpl_toolkits
+* Keras
 * Python3
 * Seaborn
 * Sklearn
@@ -46,21 +44,8 @@ This superfamily of isoenzymes are responsible for metabolizing drugs
 --------
 ### Summary
 
-Our project focused on the following 11 States in the US: 
-|States| | 
-|---|---|
-|Arizona|Montana |
-|California|New Mexico |
-|Colorado|Nevada|
-|Idaho|Utah |
-|Oregon|Washington |
-|Wyoming||
+This project focused on the following 5 Cytochromes in the P450 block: 
 
-2020 was the most active fire season in the Western United States’s recorded history. California had the single worst fire season in it’s history, while Arizona had the worst in a decade. Oregon had its most destructive fire season meanwhile Washington and Colorado had several of their all time largest wildfires. Overall 10.2 million acres of land went up in flame and 46 people lost their lives. 13,887 buildings were destroyed and the total cost is upwards of 19.88 billion USD. It is evident that fire is a clear and present danger in the western united states. 
-
-The global atmospheric monitoring satellite Copernicus has recorded CO2 emissions from the 2020 fires and noted that “The fires are also emitting lots of smoke and pollution into the atmosphere; those in California and Oregon have already emitted far more carbon in 2020 than in any other year since CAMS records begin in 2003” - [CAMS monitors smoke release from devastating US wildfires | Copernicus](https://atmosphere.copernicus.eu/cams-monitors-smoke-release-devastating-us-wildfires). We decided to investigate the relationship between weather data (precipitation, temperatures, and drought) and the occurrence of fires, and to attempt building a model which would predict the destructive sizes of wildfire to help prevent the associated damage for our communities.
-
-Following National Wildfire Coordinating Group's convention which groups fires into ranges of fire size based on the number of acres within the final fire perimeter, we chose to set up our model as a a multi-classification where class "A" corresponds to fires smaller than 0.01 acres, "B" - 0.225 acres, "C" - 10 acres, "D" - 100 acres , "E" - 300 acres , "F" - 1000 acres, and "G" - fires larger than that.
 
 ----------------
 ### Data
@@ -79,58 +64,28 @@ Rdkit casts fingerprints as a unique type of object, which is not readable by ou
 
 These bits are converted two more times - once more to a Bit String which are much easier to work with. Then each bit is cast as a feature (meaning they each get their own column in the dataframe). In the end, each element has each bit cast as a feature of that molecule for modeling.
 
-![](/visuals/fire_size_vs_temp_precip_by_month.png)
+![](data/visuals/)
 
 ---------
 ### Modeling
 
-The project ultimately uses two main models. Neural network for predictive power and Random Forest Classifier for feature importance. We optimized the neural network on recall score focusing on true positive rate and capturing large fires over small fires. Large fires being more destructive and being more in line with the scope of the project at the expense of smaller fires. The final chosen neural network model topology optimizes recall over accuracy. When we focused on accuracy, we were predicting the majority class (small fires) over the minority (large fires) which missed the most destructive wildfires. 
-
-To improve our models, we employed the modeling technique of bootstrapping which gave us a more normal distribution of wildfire classes. This way, we were able to capture our larger fires. It greatly improved recall which is ultimately the target we wanted to pursue, as this helped us predict  larger and more destructive wildfires. 
-
-The second modeling breakthrough we had was harnessing geospatial data through KMeans clustering of longitude and latitudinal data. We then One-Hot-Encoded it which gave us a sparse matrix that was the most important predictive element of our model. We believe that this is because terrain features matter immensely when determining the potential size of a wildfire. (See confusion matrix below)
-
-The third major breakthrough was the trailing averages as noted in the summary above. Adding that data essentially doubled our recall scores for medium sized fires, which improved our overall model recall. Next, since our Neural Network is a blackbox model, we were not able to glean as much insight into features. We utilized Random Forest Classification to compliment insights from our Neural Network model by providing top features and weights.
-
-**Top 3 features (excluding location clusters):**
-|Feature|Importance|Feature Description|  
-|---|---|---|  
-|tavg_t3m|0.05085|Average Temperature Past 3 Months|  
-|pcp|0.04720|Month Precipitation|  
-|tavg_t6m|0.04633|Average Temperature Past 6 Months|
 
 
-![](/visuals/confusion_matrix_fire.png)
+
+
+
+![]()
 
 ---------------------------
 ### Conclusions
 
-1. Wildfires are extremely complex phenomena. While the NOAA data offered a set of independent variables which fairly comprehensively described weather history, we were not able to include in our model other important factors which also affect final fire size, such as wind or terrain features (e.g. land cover or incline).
-
-2. Switching our target variable from a continuous one (fire size, in acres) to a multi-class problem improved the score from an R2 of under 10% to accuracy of over 60%. Further, re-defining the problem as a binary classification of "large" vs "small" fires drove accuracy up to 62-77%, depending on the threshold chose to delineate between the two classes.
-
-3. Because our goal was to improve preparedness and help contain damage from wildfires without putting efforts into preventing fires which weren't likely to spread, our ultimate focus was on increasing the recall of our model, and moreover - to increase its recall with regards to large fires.
-
-4. Each of the seven-class classifications requires sklearn's estimators to perform 7 x (7-1) / 2 = 21 separate classifications - fitting some of the estimators we evaluated (e.g. SVM) was very computationally expensive.
-
-5. Despite being computationally expensive, we were able to create a model that gave us a significant increase in our recall score. We can confidently predict very large fires and some mid range fires with our current model.
 
 --------------------------------
 **Classes and model improvements:**
-|Class| Size Acres|Baseline (% of dataset)|Final Model|
-|---|---|---|---|
-|A| >0<=0.25|62%|59%|
-|B|0.26-9.9|29%|1%|
-|C|10.0-99.9|6%|20%|
-|D|100-299|2%|50%||
-|E|300 to 999|1%|58%|
-|F|1000 to 4999|2%|59%|
-|G|5000+|0.07%|86%|
+
 
 -----------------------
 ### Recommendations
-
-For further research we recommend extracting NOAA wind data such as wind speed, gusts and potentially wind directionality. Furthermore, vegetation data and environmental composition data which is available on Google’s Earth Engine’s LANDFIRE databases potentially play a significant part in telling a deeper story on a wildfire destructive ability. Merging those features into our datasets was unfortunately out of reach due to the time restraints thus we did not include them. However we believe these features merged into our current dataset could expand in a worthwhile manner.
 
 -----------------------
 ### Data Dictionary 
@@ -197,17 +152,5 @@ Source: https://static-content.springer.com/esm/art%3A10.1038%2Fsrep42717/MediaO
 <br>
 
 **Cytochrome P450 isoenzymes**
-|Feature|Description|
-|---|---|
-|pcp|Precipitation|
-|tavg|Average Tempurature|
-|pdsi|Hydrological Drought Index|
-|phdi|Palmer Hydrological Drought Index|
-|zndx|Palmer Zindex Data|
-|pmdi|Palmer Drought Severity Index|
-|sp02 - sp24|Precipitation|
-|tmin|Minimum Temperature|
-|tmax|Maximum Temperature|
-|month_2 - month_12|Dummy Month Variables|
 
 
