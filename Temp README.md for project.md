@@ -65,15 +65,19 @@ Following National Wildfire Coordinating Group's convention which groups fires i
 ----------------
 ### Data
 
-We used two sources of data which were studied through EDA and then combined into a single data frame which informed the modeling phase:
-- Meteorological dataset covering 120 years of weather information for the 11 western US states of: AZ, CA, CO, ID, NM, NV, MT, OR, UT, WA, and WY, including metrics and indexes describing precipitation, temperatures, and droughts;
-- A spatial database of 1.88 million wildfires that occurred in the United States from 1992 to 2015 and burned 140 million acres burned during the 24-year period. This data was originally generated to support the national Fire Program Analysis (FPA) system and is currently obtainable from Kaggle.com. The data set includes: discovery date, final fire size, and a point location (latitude and longitude) among many other features.
+PUBCHEM_SID will need to be converted from SID > SMILES   
 
-The two datasets were combined by matching weather information and fire data on the combination of month-year-state for each of the fires that burned from 1992 to 2015 in the eleven states of interest. Due to the cumulative nature of meteorological affects on drought severity, we chose to include drought, temperature and precipitation trailing averages over 12-, 9-, 6-, and 3-months.
+SMILES data is The simplified molecular-input line-entry systemThe simplified molecular-input line-entry system (SMILES) which is is a specification in the form of a line notation for describing the structure of chemical species using short ASCII strings.
 
-We also took a deep dive into NOAA wind data but discovered that the combined datasets were far too large to add to our existing dataframe.  Wind direction is a great weather predictor, and because wind speed can feed fires, we believe that adding wind data, such as wind speed, gusts and potentially wind direction would have added significant value to our models.
+SMILES data is not very readable for modeling, though so we will need to convert it further to a Morgan Fingerprint Hash.  
 
-Another interesting data set we encountered was foliage data from Google Earth Engine. This required setting up an account with Google and being accepted to use their engine, and then exploring data using Javascript. It became too cumbersome for our efforts.
+Fingerprints in data are a fingerprinting algorithm is a procedure that maps an arbitrarily large data item (such as a computer file) to a much shorter bit string, its fingerprint, that uniquely identifies the original data for all practical purposes just as human fingerprints uniquely identify people for practical purposes. In the case of molecular data, molecules have unique "ring" fingerprints.
+
+This family of fingerprints, better known as circular fingerprints, is built by applying the Morgan algorithm to a set of user-supplied atom invariants. The Morgan algorithm converts a single molecule into a fixed number of binary bits (e.g. 2048). Each bit corresponds to the presence/absence of chemical substructures up to a specified radius (e.g. 2).
+
+Rdkit casts fingerprints as a unique type of object, which is not readable by our models. To get around this, we convert the Hashed Morgan Fingerprint to a Bit Vector. Bit Vectors are just arrays of bits. 
+
+These bits are converted two more times - once more to a Bit String which are much easier to work with. Then each bit is cast as a feature (meaning they each get their own column in the dataframe). In the end, each element has each bit cast as a feature of that molecule for modeling.
 
 ![](/visuals/fire_size_vs_temp_precip_by_month.png)
 
