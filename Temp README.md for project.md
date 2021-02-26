@@ -35,7 +35,7 @@ This Project is created with:
 ### Problem Statement
 
 The 5 Cytochrome P450 block of enzymes we are talking about today are a part of a larger block of more than 50 different enzymes. These 5 are responsible for breaking down about 30% to 90% of drugs depending on the source of information. Genetics affect the way they metabolize proteins.
-Because of this, there are HUGE implications for prescribing drugs that are ineffective or possibly toxic for the individual patient.
+Because of this, there are HUGE implications for prescribing drugs that are ineffective or possibly toxic for the individual patient. Can we build a model to predict inihibition of enzymes based on molecular features?
 
 The "superblock" can contain 5-6 enzymes depending on  the source. We will be working with the following 5 enzymes based on SwissADMEs dataset and process with hopes of adding additional important cytochromes in the future:
 
@@ -106,6 +106,10 @@ Rdkit casts fingerprints as a unique type of object, which is not readable by ou
 
 These bits are converted two more times - once more to a Bit String which are much easier to work with. Then each bit is cast as a feature (meaning they each get their own column in the dataframe). In the end, each element has each bit cast as a feature of that molecule for modeling.
 
+Once the data was converted, both the full converted dataset and datasets broken up by isoenzme were created for Exploratory Data Analysis and Modeling
+
+After running EDA and models on the Fingerprint data which would have easily met MVP for this project, I decided to try to do some feature engineering to match SwissADME's feature set for this component of their project. This process has taken a long time due to having never worked with molecular data or rdkit before. 17 of the 50 features were extracted and run through EDA and modeling just to see how things ran with that small subset. 
+
 ![](data/visuals/)
 
 ---------
@@ -113,9 +117,9 @@ These bits are converted two more times - once more to a Bit String which are mu
 
 In the interest of time, train_test_split used to create training, testing, and valiation datasets. 
 
-The models chosen are: a Markov Chain Classifier Neural Netowork employed using Keras and SciKitLearn, and a SciKitLearn implementation of SVC SVM model utilizing gridsearching for parameter optimization around both accuracy and recall. Both models performed well, though we will likely stick with the SVM model as that is the model used for SwissADME. 
+The models chosen are: a Markov Chain Classifier Neural Netowork employed using Keras and SciKitLearn, and a SciKitLearn implementation of SVC SVM model utilizing gridsearching for parameter optimization around both accuracy and recall. Both models performed relatively well. The Markov Chain Neural Netowrk gave a mean area under curve (AUC) of 0.536 and Accuracy (ACC) of  0.956. For the **Tuned** SVM Model weighted average means were: precision - 0.88, recall - 0.93, and f1-score of 0.90.  We will likely stick with the SVM model as that is the model used for SwissADME, though exploring other models will likey be used in the exploratory process. 
 
-The models were deployed on various datasets:
+The models were deployed on all created datasets:
 Each cytochrome enzyme with fingerprint data, and again with engineered feature data. The models were also deployed on each of the full merged datasets for fingerprint data and engineered feature data.
 
 
@@ -124,7 +128,7 @@ Each cytochrome enzyme with fingerprint data, and again with engineered feature 
 ---------------------------
 ### Conclusions
 
-Our models can predict 
+Our models do a pretty good 
 
  Currently both models we are using are showing promising accuracy scores on par with or better than SwissADMEs model scores, though there is more work to be done on the feature set to make parity, and a worry of overfitting. 
 
