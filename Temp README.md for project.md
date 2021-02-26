@@ -97,23 +97,36 @@ Source: https://static-content.springer.com/esm/art%3A10.1038%2Fsrep42717/MediaO
 |Index|Variable|Description|
 |---|---|---|
 |1|nF |number of fluorine atoms|
-|2|sbonds |number of single bonds|
-|3|dbonds|number of double bonds|
-|4|tbonds|number of triple bonds|
-|5|abonds|number of aromatic bonds|
-|6|GetMolWt|molecular weight|
-|7|NumAtoms|number of atoms|
-|8|NumHvyAtoms|number of heavy atoms|
+|2|single_bond *n_bonds|number of single bonds|
+|3|dbonds *n_bonds|number of double bonds|
+|4|tbonds *n_bonds|number of triple bonds|
+|5|abonds *n_bonds|number of aromatic bonds|
+|6|mol_weight|molecular weight|
+|7|n_atoms|number of atoms|
+|8|n_heavy_atoms|number of heavy atoms|
+|10|h_bond_acceptors|number of H-bond acceptors|
+|11|h_bond_donors|number of H-bond donors|
+|12|n_carbons|number of carbon atoms|
+|13|n_heteroatoms|number of heteroatoms|
+|14|n_aromatic_atom|number of aromatic atoms|
+|15|n_rot_bonds|number of rotatable bonds|
+|16|n_rings|number of rings|
+|17|tpsa|topological surface area|
+|18|molar_refractivity|molecular refractivityty|
+|35|logp|OpeBabel log <em>P</em>|
+
+## Additional features added for functionality to get other features:
+|Index|Variable|Description|
+|---|---|---|
+|#|conformer |The class to store 2D or 3D conformation of a molecule|
+|#| stereo| Returns the stereo configuration of the bond as a BondStereo|
+|#| is_conjugated| Returns whether or not the bond is considered to be conjugated.|
+|#| bond_type| Returns the type of the bond as a BondType|
+
+## To be added 
+|Index|Variable|Description|
+|---|---|---|
 |9|AP|aromatic portion|
-|10|NumAcceptor|number of H-bond acceptors|
-|11|NumDonor|number of H-bond donors|
-|12|Num Carbon|number of carbon atoms|
-|13|NumHetero|number of heteroatoms|
-|14|NumAromatic|number of aromatic atoms|
-|15|NumRotors|number of rotatable bonds|
-|16|NumRing|number of rings|
-|17|TPSA|topological surface area|
-|18|MR|molecular refractivityty|
 |19|MlogpCX|weighted sum of carbon and halogen atoms|
 |20|MlogpNO|total number of nitrogen and oxygen atoms|
 |21|MLogpUB|number of undsaturated bonds|
@@ -130,7 +143,6 @@ Source: https://static-content.springer.com/esm/art%3A10.1038%2Fsrep42717/MediaO
 |32|mlogp|MLOGP|
 |33|mhlogp|NC+NHET log <em>P</em>|
 |34|alogp|WLOGP|
-|35|logP|OpeBabel log <em>P</em>|
 |36|NumSpiro|number of spiro groups|
 |37|NumBridge|number of ringbridging atoms|
 |38|NumStero|number of stereocenters|
@@ -146,6 +158,12 @@ Source: https://static-content.springer.com/esm/art%3A10.1038%2Fsrep42717/MediaO
 |48|logSwE|ESOL log <em>S</em>|
 |49|logSwA|Ali log <em>S</em>|
 |50|silicos_logS|Filter-IT log <em>S</em>|
+
+
+
+
+
+
 
 
 
